@@ -21,12 +21,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
+import static java.awt.Color.blue;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -96,9 +100,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         //Adda view button and method to switch between satellite and map views
-        LocationSearch = (EditText) findViewById(R.id.editText_addr);
+        LocationSearch = (EditText) findViewById(R.id.editText_address);
 
         gotMyLocationOneTIme = false;
+        getLocation();
     }
 
 
@@ -247,6 +252,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
             Log.d("MyMapsApp", "locationListenerNetwork: status change");
+            //switch(i)
+            //printout log.d and, or toast message
+            //break;
+            //case locationprovider.out_of_service
+            //enable network updates
+            //break;
+            //case locatino provider_temporarily_unavaiable
+            //enable both network and gps
+            // break;
+            //default;
+            // enable both netowrk and gps
 
         }
 
@@ -260,4 +276,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
     }
+    public void dropAmarker(String provider) {
+        if (locationManager != null) {
+            if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            myLocation = locationManager.getLastKnownLocation(provider);
+            LatLng userLocation = null;
+            if (myLocation == null) {
+                Log.d("MyMapsApp", "dropAMarker: location is null");
+
+            } 
+            else {
+                userLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(userLocation, MY_LOC_ZOOM_FACTOR)  // its set to 17
+                if (provider == LocationManager.GPS_PROVIDER) {
+                    mMap.addCircle(new CircleOptions().center(userLocation).radius(1).strokeColor(Color.red.getRGB()).strokeWidth(2).fillColor(Color.RED.getRGB()));
+                }
+                else
+                {
+                    mMap.addCircle(new CircleOptions().center(userLocation).radius(1).strokeColor(Color.blue.getRGB()).strokeWidth(2).fillColor(Color.BLUE.getRGB()));
+
+                }
+                mMap.animateCamera(update);
+            }
+        }
+
+
+        }
+
+    public void trackMyLocation (View view)
+    {
+        //kick off the location tracker using getLocation to start the LocationListener
+        getLocation().LocationListener
+        //if(notTrackingMyLocation) { getLocation(); notTrackingMyLocation = false;
+        //else{ removeUpdates for both network and gps; notTrackingMyLocation = true;
+
+    }
+
+
 }
