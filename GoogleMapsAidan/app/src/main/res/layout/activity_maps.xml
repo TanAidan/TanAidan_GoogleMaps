@@ -26,6 +26,7 @@
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
+            android:onClick="trackMyLocation"
             android:text="track" />
 
         <Button
@@ -34,6 +35,7 @@
             android:layout_width="110dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
+            android:onClick="clear"
             android:text="clear" />
 
     </LinearLayout>
